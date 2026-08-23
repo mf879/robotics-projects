@@ -4,8 +4,7 @@ General Engineering student at the University of Cambridge, building
 mechatronics/embedded projects on the side — mostly Arduino-based
 electromechanical systems, designed and 3D-printed (Bambu Lab A1) at home.
 
-**Live site:** replace with your GitHub Pages URL once this repo is pushed
-(Settings → Pages → deploy from `/docs`) — e.g. `https://<username>.github.io/robotics-projects/`
+**Live site:** https://mf879.github.io/robotics-projects/
 
 ## Projects
 
