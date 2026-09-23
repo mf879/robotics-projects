@@ -1,0 +1,80 @@
+#include <Wire.h>
+#include <math.h>
+
+const byte MPU = 0x68;
+
+float angle = 0;
+float gyroOffset = 0;
+unsigned long lastTime;
+
+bool readMpu(float &accelAngle, float &gyroRate) {
+  Wire.beginTransmission(MPU);
+  Wire.write(0x3B);
+
+  if (Wire.endTransmission(false) != 0) return false;
+  if (Wire.requestFrom(MPU, (byte)14, (byte)true) != 14) return false;
+
+  int16_t ax = (Wire.read() << 8) | Wire.read();
+  Wire.read();
+  Wire.read();
+  int16_t az = (Wire.read() << 8) | Wire.read();
+
+  Wire.read();
+  Wire.read();
+  Wire.read();
+  Wire.read();
+
+  int16_t gy = (Wire.read() << 8) | Wire.read();
+
+  accelAngle = atan2((float)ax, (float)az) * 180.0 / PI;
+  gyroRate = gy / 131.0;
+  return true;
+}
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin();
+
+  Wire.beginTransmission(MPU);
+  Wire.write(0x6B);
+  Wire.write(0);
+  Wire.endTransmission(true);
+
+  delay(500);
+
+  float accelAngle;
+  float gyroRate;
+
+  for (int i = 0; i < 500; i++) {
+    if (readMpu(accelAngle, gyroRate)) gyroOffset += gyroRate;
+    delay(2);
+  }
+
+  gyroOffset /= 500.0;
+
+  if (readMpu(accelAngle, gyroRate)) angle = accelAngle;
+  lastTime = micros();
+}
+
+void loop() {
+  float accelAngle;
+  float gyroRate;
+
+  if (!readMpu(accelAngle, gyroRate)) {
+    Serial.println("mpu not responding");
+    delay(100);
+    return;
+  }
+
+  unsigned long now = micros();
+  float dt = (now - lastTime) / 1000000.0;
+  lastTime = now;
+
+  if (dt > 0 && dt < 0.1) {
+    angle = 0.98 * (angle + (gyroRate - gyroOffset) * dt)
+          + 0.02 * accelAngle;
+  }
+
+  Serial.println(angle, 2);
+  delay(10);
+}
