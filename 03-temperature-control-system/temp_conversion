@@ -1,0 +1,31 @@
+#include <math.h>
+
+const int THERMISTOR_PIN = A0;
+const float SERIES_RESISTOR = 10000.0;
+const float NOMINAL_RESISTANCE = 10000.0;
+const float NOMINAL_TEMP_C = 25.0;
+const float BETA = 3950.0;
+
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  int reading = analogRead(THERMISTOR_PIN);
+
+  if (reading <= 1 || reading >= 1022) {
+    Serial.println("Sensor fault");
+  } else {
+    float resistance = SERIES_RESISTOR * reading / (1023.0 - reading);
+    float inverseKelvin =
+        1.0 / (NOMINAL_TEMP_C + 273.15)
+        + log(resistance / NOMINAL_RESISTANCE) / BETA;
+    float temperatureC = 1.0 / inverseKelvin - 273.15;
+
+    Serial.print("Temperature: ");
+    Serial.print(temperatureC, 1);
+    Serial.println(" C");
+  }
+
+  delay(1000);
+}
