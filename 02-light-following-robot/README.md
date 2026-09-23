@@ -2,7 +2,11 @@
 
 A two-wheeled robot that steers towards a light source by comparing two LDRs.
 
-![Demo](media/light-following-robot-demo.gif)
+
+
+https://github.com/user-attachments/assets/efd54bdc-8bef-4f77-bc6e-9d3f38fa22f7
+
+
 
 
 <!-- Put a photo or a short clip here. Ten seconds of it following a torch is the single
