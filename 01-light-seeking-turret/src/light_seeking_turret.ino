@@ -1,19 +1,3 @@
-/*
-  Light-Seeking Turret
-  ---------------------
-  A servo-mounted turret that sweeps a light-dependent resistor (LDR) back
-  and forth, compares each reading against a calibrated "room light"
-  baseline, and locks onto the first angle where a bright light source
-  (e.g. a torch) is detected — switching on a laser pointer and sounding a
-  buzzer as confirmation.
-
-  Hardware: Arduino Uno R3, SG90-class servo, LDR (voltage divider into A0),
-  laser diode module, passive/active buzzer.
-
-  This is the working, integrated version. The individual subsystems
-  (servo motion, LDR reading, buzzer/laser outputs) were bench-tested in
-  isolation first — see ../bringup-tests/ for those scripts.
-*/
 
 #include <Servo.h>
 
