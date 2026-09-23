@@ -58,13 +58,7 @@ rating, so the drive speed in the code is a limit, not an arbitrary number.
 
 Each subsystem was tested on its own before anything was combined.
 
-## Known limitations
 
-- The baseline is taken once at startup. If a bright light is already pointed at it
-  while it calibrates, that light becomes "normal" and the robot will not react to it.
-- It slows a wheel rather than reversing one, so there is a minimum turn radius. It
-  cannot spin on the spot to find a light behind it.
-- With no target it stops rather than searching.
 
 ## What I learned
 
