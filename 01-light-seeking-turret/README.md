@@ -55,8 +55,3 @@ closed-loop sketch above — see [`bringup-tests/`](bringup-tests/):
 - `lightMargin` is the main value to tune: too low and it triggers on
   ambient light drift; too high and it misses a dim torch.
 
-## What's next
-
-The same LDR-and-servo pattern (bench-test each part, then close the
-loop) carries over directly into the [light-following car](../02-light-following-car/),
-which swaps the servo for two driven wheels.
