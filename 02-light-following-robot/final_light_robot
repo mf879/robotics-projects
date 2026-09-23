@@ -1,0 +1,91 @@
+const int AIN1 = 2;
+const int AIN2 = 4;
+const int PWMA = 5;
+
+
+const int BIN1 = 7;
+const int BIN2 = 8;
+const int PWMB = 9;
+
+
+const int leftLDR = A1;
+const int rightLDR = A0;
+
+const int baseSpeed = 150;    
+const int turnSpeed = 60;        
+const int detectThreshold = 20;  
+const int turnMargin = 40;       
+int baselineLeft = 0;
+int baselineRight = 0;
+
+void setup() {
+  pinMode(AIN1, OUTPUT); pinMode(AIN2, OUTPUT); pinMode(PWMA, OUTPUT);
+  pinMode(BIN1, OUTPUT); pinMode(BIN2, OUTPUT); pinMode(PWMB, OUTPUT);
+  Serial.begin(9600);
+
+  calibrateBaseline();
+}
+
+void calibrateBaseline() {
+  long sumL = 0, sumR = 0;
+  const int samples = 50;
+  for (int i = 0; i < samples; i++) {
+    sumL += analogRead(leftLDR);
+    sumR += analogRead(rightLDR);
+    delay(20);
+  }
+  baselineLeft = sumL / samples;
+  baselineRight = sumR / samples;
+
+  Serial.print("Baseline — Left: ");
+  Serial.print(baselineLeft);
+  Serial.print("  Right: ");
+  Serial.println(baselineRight);
+}
+
+void setRightMotor(int speed, bool forward) {
+  digitalWrite(AIN1, forward ? HIGH : LOW);
+  digitalWrite(AIN2, forward ? LOW : HIGH);
+  analogWrite(PWMA, speed);
+}
+
+void setLeftMotor(int speed, bool forward) {
+  digitalWrite(BIN1, forward ? LOW : HIGH);
+  digitalWrite(BIN2, forward ? HIGH : LOW);
+  analogWrite(PWMB, speed);
+}
+
+void stopMotors() {
+  analogWrite(PWMA, 0);
+  analogWrite(PWMB, 0);
+}
+
+void loop() {
+  int leftRaw = analogRead(leftLDR);
+  int rightRaw = analogRead(rightLDR);
+
+  int deltaLeft = leftRaw - baselineLeft;
+  int deltaRight = rightRaw - baselineRight;
+  if (deltaLeft < 0) deltaLeft = 0;
+  if (deltaRight < 0) deltaRight = 0;
+
+  Serial.print("dL: "); Serial.print(deltaLeft);
+  Serial.print("  dR: "); Serial.println(deltaRight);
+
+  bool targetDetected = (deltaLeft > detectThreshold) || (deltaRight > detectThreshold);
+
+  if (!targetDetected) {
+    stopMotors();
+  } else if (deltaLeft > deltaRight + turnMargin) {
+    setLeftMotor(turnSpeed, true);   
+    setRightMotor(baseSpeed, true);
+  } else if (deltaRight > deltaLeft + turnMargin) {
+    setLeftMotor(baseSpeed, true);   
+    setRightMotor(turnSpeed, true);
+  } else {
+    setLeftMotor(baseSpeed, true);   
+    setRightMotor(baseSpeed, true);
+  }
+
+  delay(50);
+}
