@@ -4,7 +4,7 @@ Arduino and C++ builds I have designed, wired and tested myself. Each folder hol
 
 Marco Faria, second year  Engineering, University of Cambridge.
 
-Start with the self balancing robot if you only look at one.
+
 
 ---
 
