@@ -2,7 +2,7 @@
 
 Arduino and C++ builds I have designed, wired and tested myself. Each folder holds the code, the wiring, the bench tests and what I would change next.
 
-Marco Faria, second year General Engineering, University of Cambridge.
+Marco Faria, second year  Engineering, University of Cambridge.
 
 Start with the self balancing robot if you only look at one.
 
@@ -55,9 +55,4 @@ Every build here started as a breadboard circuit before anything was mounted. I 
 - **Email:** mf879@cam.ac.uk
 - **GitHub:** [github.com/mf879](https://github.com/mf879)
 
-## About this repo
 
-Code was prototyped with AI-assisted drafting, then reviewed, tested on
-hardware, and adapted by hand — noted per project below rather than
-presented as written from scratch, since that's the honest and, frankly,
-more useful account of how it came together.
