@@ -1,0 +1,49 @@
+const int STBY = 4;
+const int PWMA = 5;
+const int PWMB = 6;
+const int AIN1 = 7;
+const int AIN2 = 8;
+const int BIN1 = 9;
+const int BIN2 = 10;
+
+void motorA(int speed) {
+  digitalWrite(AIN1, speed > 0);
+  digitalWrite(AIN2, speed < 0);
+  analogWrite(PWMA, abs(speed));
+}
+
+void motorB(int speed) {
+  digitalWrite(BIN1, speed > 0);
+  digitalWrite(BIN2, speed < 0);
+  analogWrite(PWMB, abs(speed));
+}
+
+void setup() {
+  pinMode(STBY, OUTPUT);
+  pinMode(PWMA, OUTPUT);
+  pinMode(PWMB, OUTPUT);
+  pinMode(AIN1, OUTPUT);
+  pinMode(AIN2, OUTPUT);
+  pinMode(BIN1, OUTPUT);
+  pinMode(BIN2, OUTPUT);
+
+  digitalWrite(STBY, HIGH);
+}
+
+void loop() {
+  motorA(110);
+  motorB(110);
+  delay(1500);
+
+  motorA(0);
+  motorB(0);
+  delay(1000);
+
+  motorA(-110);
+  motorB(-110);
+  delay(1500);
+
+  motorA(0);
+  motorB(0);
+  delay(2000);
+}
