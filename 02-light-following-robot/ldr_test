@@ -1,0 +1,18 @@
+const int leftLDR = A1;
+const int rightLDR = A0;
+
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  int leftVal = analogRead(leftLDR);
+  int rightVal = analogRead(rightLDR);
+
+  Serial.print("Left: ");
+  Serial.print(leftVal);
+  Serial.print("   Right: ");
+  Serial.println(rightVal);
+
+  delay(200);
+}
