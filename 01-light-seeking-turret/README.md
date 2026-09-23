@@ -7,7 +7,7 @@ confirmation.
 
 
 
-https://github.com/user-attachments/assets/11838756-f46a-45fb-980a-0ed4bfb92a43
+![Demo](light-seeking-turret-demo.gif)
 
 
 
