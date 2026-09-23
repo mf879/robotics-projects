@@ -2,6 +2,11 @@
 
 A two-wheeled robot that steers towards a light source by comparing two LDRs.
 
+
+https://github.com/user-attachments/assets/ef2357e3-c997-4311-ba16-b4871d967a93
+
+
+
 <!-- Put a photo or a short clip here. Ten seconds of it following a torch is the single
      best thing you can add to this repo. -->
 
