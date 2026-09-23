@@ -5,7 +5,11 @@ resistor), detects the brightest light source (e.g. a torch), and locks
 onto it — switching on a laser pointer and sounding a buzzer as
 confirmation.
 
-![Turret demo](../docs/assets/turret-demo.gif)
+
+
+https://github.com/user-attachments/assets/11838756-f46a-45fb-980a-0ed4bfb92a43
+
+
 
 ## How it works
 
