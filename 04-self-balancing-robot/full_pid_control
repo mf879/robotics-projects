@@ -1,0 +1,167 @@
+#include <Wire.h>
+#include <math.h>
+
+const byte MPU = 0x68;
+
+const int STBY = 4;
+const int PWMA = 5;
+const int PWMB = 6;
+const int AIN1 = 7;
+const int AIN2 = 8;
+const int BIN1 = 9;
+const int BIN2 = 10;
+
+const int LEFT_DIRECTION = 1;
+const int RIGHT_DIRECTION = 1;
+
+float KP = 18.0;
+float KI = 0.0;
+float KD = 0.7;
+
+float targetAngle = 0.0;
+float angle = 0.0;
+float gyroOffset = 0.0;
+float integral = 0.0;
+
+unsigned long lastLoop = 0;
+unsigned long lastPrint = 0;
+
+bool readMpu(float &accelAngle, float &gyroRate) {
+  Wire.beginTransmission(MPU);
+  Wire.write(0x3B);
+
+  if (Wire.endTransmission(false) != 0) return false;
+  if (Wire.requestFrom(MPU, (byte)14, (byte)true) != 14) return false;
+
+  int16_t ax = (Wire.read() << 8) | Wire.read();
+  Wire.read();
+  Wire.read();
+  int16_t az = (Wire.read() << 8) | Wire.read();
+
+  Wire.read();
+  Wire.read();
+  Wire.read();
+  Wire.read();
+
+  int16_t gy = (Wire.read() << 8) | Wire.read();
+
+  accelAngle = atan2((float)ax, (float)az) * 180.0 / PI;
+  gyroRate = gy / 131.0;
+  return true;
+}
+
+void driveMotor(int speed, int in1, int in2, int pwm) {
+  speed = constrain(speed, -255, 255);
+
+  if (speed == 0) {
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, LOW);
+  } else {
+    digitalWrite(in1, speed > 0 ? HIGH : LOW);
+    digitalWrite(in2, speed < 0 ? HIGH : LOW);
+  }
+
+  analogWrite(pwm, abs(speed));
+}
+
+void drive(int speed) {
+  driveMotor(speed * LEFT_DIRECTION, AIN1, AIN2, PWMA);
+  driveMotor(speed * RIGHT_DIRECTION, BIN1, BIN2, PWMB);
+}
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin();
+
+  pinMode(STBY, OUTPUT);
+  pinMode(PWMA, OUTPUT);
+  pinMode(PWMB, OUTPUT);
+  pinMode(AIN1, OUTPUT);
+  pinMode(AIN2, OUTPUT);
+  pinMode(BIN1, OUTPUT);
+  pinMode(BIN2, OUTPUT);
+
+  digitalWrite(STBY, LOW);
+  drive(0);
+
+  Wire.beginTransmission(MPU);
+  Wire.write(0x6B);
+  Wire.write(0);
+  Wire.endTransmission(true);
+
+  // keep it still and upright for this bit
+  delay(500);
+
+  float accelAngle;
+  float gyroRate;
+  int goodReads = 0;
+
+  for (int i = 0; i < 500; i++) {
+    if (readMpu(accelAngle, gyroRate)) {
+      gyroOffset += gyroRate;
+      goodReads++;
+    }
+    delay(2);
+  }
+
+  if (goodReads == 0) {
+    Serial.println("mpu not responding");
+    return;
+  }
+
+  gyroOffset /= goodReads;
+
+  if (readMpu(accelAngle, gyroRate)) angle = accelAngle;
+  lastLoop = micros();
+  digitalWrite(STBY, HIGH);
+}
+
+void loop() {
+  unsigned long now = micros();
+
+  // aim for one update every 5 ms
+  if (now - lastLoop < 5000) return;
+
+  float dt = (now - lastLoop) / 1000000.0;
+  lastLoop = now;
+
+  float accelAngle;
+  float gyroRate;
+
+  if (dt > 0.03 || !readMpu(accelAngle, gyroRate)) {
+    drive(0);
+    integral = 0;
+    return;
+  }
+
+  gyroRate -= gyroOffset;
+
+  // gyro reacts fast, accel pulls the angle back from drift
+  angle = 0.98 * (angle + gyroRate * dt)
+        + 0.02 * accelAngle;
+
+  // stop trying once it has fallen over
+  if (abs(angle - targetAngle) > 35.0) {
+    drive(0);
+    integral = 0;
+    return;
+  }
+
+  float error = angle - targetAngle;
+
+  integral += error * dt;
+  integral = constrain(integral, -30.0, 30.0);
+
+  float output = KP * error + KI * integral + KD * gyroRate;
+  int motorSpeed = constrain((int)output, -255, 255);
+
+  drive(motorSpeed);
+
+  if (millis() - lastPrint >= 100) {
+    lastPrint = millis();
+    Serial.print("angle ");
+    Serial.print(angle, 1);
+    Serial.print(" speed ");
+    Serial.println(motorSpeed);
+  }
+}
