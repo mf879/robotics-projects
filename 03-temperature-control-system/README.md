@@ -49,10 +49,6 @@ when it came on, but the current no longer went near the board.
 - `tempconversion.ino` — prints the converted temperature, used to check the Beta equation before adding control
 - `relay_test.ino` — clicks the relay once, used to confirm the module was active low
 
-## Safety note
-
-The heater runs from its own supply and is isolated from the Arduino by the relay. Do
-not power a heating element directly from a microcontroller board.
 
 ## What I learned
 
