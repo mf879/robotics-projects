@@ -1,0 +1,80 @@
+const int AIN1 = 2;
+const int AIN2 = 4;
+const int PWMA = 5;
+
+
+const int BIN1 = 7;
+const int BIN2 = 8;
+const int PWMB = 9;
+
+const int driveSpeed = 150; 
+
+void setup() {
+  pinMode(AIN1, OUTPUT);
+  pinMode(AIN2, OUTPUT);
+  pinMode(PWMA, OUTPUT);
+  pinMode(BIN1, OUTPUT);
+  pinMode(BIN2, OUTPUT);
+  pinMode(PWMB, OUTPUT);
+}
+
+void forward() {
+  digitalWrite(AIN1, HIGH); digitalWrite(AIN2, LOW);
+  analogWrite(PWMA, driveSpeed);
+
+  digitalWrite(BIN1, LOW); digitalWrite(BIN2, HIGH);
+  analogWrite(PWMB, driveSpeed);
+}
+
+void backward() {
+  digitalWrite(AIN1, LOW); digitalWrite(AIN2, HIGH);
+  analogWrite(PWMA, driveSpeed);
+
+  digitalWrite(BIN1, HIGH); digitalWrite(BIN2, LOW);
+  analogWrite(PWMB, driveSpeed);
+}
+
+void turnLeft() {
+  // right wheel forward, left wheel backward -> pivots left
+  digitalWrite(AIN1, HIGH); digitalWrite(AIN2, LOW);
+  analogWrite(PWMA, driveSpeed);
+
+  digitalWrite(BIN1, HIGH); digitalWrite(BIN2, LOW);
+  analogWrite(PWMB, driveSpeed);
+}
+
+void turnRight() {
+  // left wheel forward, right wheel backward -> pivots right
+  digitalWrite(AIN1, LOW); digitalWrite(AIN2, HIGH);
+  analogWrite(PWMA, driveSpeed);
+
+  digitalWrite(BIN1, LOW); digitalWrite(BIN2, HIGH);
+  analogWrite(PWMB, driveSpeed);
+}
+
+void stopMotors() {
+  analogWrite(PWMA, 0);
+  analogWrite(PWMB, 0);
+}
+
+void loop() {
+  forward();
+  delay(2000);
+  stopMotors();
+  delay(1000);
+
+  backward();
+  delay(2000);
+  stopMotors();
+  delay(1000);
+
+  turnLeft();
+  delay(1000);
+  stopMotors();
+  delay(1000);
+
+  turnRight();
+  delay(1000);
+  stopMotors();
+  delay(2000);
+}
