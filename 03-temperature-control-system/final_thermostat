@@ -1,0 +1,63 @@
+#include <math.h>
+
+const int THERMISTOR_PIN = A0;
+const int RELAY_PIN = 8;
+
+const float TARGET_C = 30.0;
+const float HYSTERESIS_C = 1.0;
+const float SERIES_RESISTOR = 10000.0;
+const float NOMINAL_RESISTANCE = 10000.0;
+const float NOMINAL_TEMP_C = 25.0;
+const float BETA = 3950.0;
+
+const int RELAY_ON = LOW;
+const int RELAY_OFF = HIGH;
+
+bool heaterOn = false;
+
+float readTemperatureC() {
+  int reading = analogRead(THERMISTOR_PIN);
+
+  if (reading <= 1 || reading >= 1022) {
+    return NAN;
+  }
+
+  float resistance = SERIES_RESISTOR * reading / (1023.0 - reading);
+  float inverseKelvin =
+      1.0 / (NOMINAL_TEMP_C + 273.15)
+      + log(resistance / NOMINAL_RESISTANCE) / BETA;
+
+  return 1.0 / inverseKelvin - 273.15;
+}
+
+void setHeater(bool on) {
+  heaterOn = on;
+  digitalWrite(RELAY_PIN, on ? RELAY_ON : RELAY_OFF);
+}
+
+void setup() {
+  digitalWrite(RELAY_PIN, RELAY_OFF);
+  pinMode(RELAY_PIN, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  float temperatureC = readTemperatureC();
+
+  if (isnan(temperatureC) || temperatureC < -20.0 || temperatureC > 100.0) {
+    setHeater(false);
+    Serial.println("Sensor fault: heater OFF");
+  } else {
+    if (temperatureC <= TARGET_C - HYSTERESIS_C) {
+      setHeater(true);
+    } else if (temperatureC >= TARGET_C + HYSTERESIS_C) {
+      setHeater(false);
+    }
+
+    Serial.print("Temperature: ");
+    Serial.print(temperatureC, 1);
+    Serial.print(" C | Heater: ");
+    Serial.println(heaterOn ? "ON" : "OFF");
+  }
+
+  delay(1000);
