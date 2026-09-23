@@ -34,12 +34,6 @@ Rather than run it anyway or change the heating element, I moved the heater onto
 higher voltage supply and switched it with a relay. The Arduino kept full control of
 when it came on, but the current no longer went near the board.
 
-## One detail worth knowing
-
-In `setup()` the relay pin is written HIGH before `pinMode()` sets it as an output. On
-an input pin that enables the internal pull-up, which holds the line high while the pin
-is still an input. Since the relay module is active low, this means the heater cannot
-flick on for a few microseconds during boot.
 
 ## Hardware
 
