@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marco Faria — Robotics Projects</title>
+<meta name="description" content="Arduino and C++ builds designed, wired and tested by Marco Faria, General Engineering at the University of Cambridge.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e1116; --panel:#161b22; --panel2:#1c232c;
+    --fg:#e6edf3; --muted:#9aa4b2; --faint:#6e7681;
+    --line:#252c36; --accent:#5b8dff; --accent-soft:rgba(91,141,255,.12);
+  }
+  :root[data-theme="light"]{
+    --bg:#ffffff; --panel:#f7f8fa; --panel2:#ffffff;
+    --fg:#141820; --muted:#525c6b; --faint:#8b949e;
+    --line:#e2e6ec; --accent:#2b3a8c; --accent-soft:rgba(43,58,140,.08);
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#ffffff; --panel:#f7f8fa; --panel2:#ffffff;
+      --fg:#141820; --muted:#525c6b; --faint:#8b949e;
+      --line:#e2e6ec; --accent:#2b3a8c; --accent-soft:rgba(43,58,140,.08);
+    }
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--fg);
+    font-family:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif;
+    font-size:16px; line-height:1.6;
+  }
+  a{color:var(--accent); text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:880px; margin:0 auto; padding:0 16px}
+
+  /* ---------- masthead ---------- */
+  header{border-bottom:1px solid var(--line); background:var(--bg)}
+  .mast{display:flex; align-items:flex-start; justify-content:space-between; gap:16px; padding:40px 0 28px; flex-wrap:wrap}
+  h1{
+    font-family:"IBM Plex Sans Condensed","IBM Plex Sans",sans-serif;
+    font-size:clamp(28px,5vw,40px); font-weight:600; letter-spacing:-.01em; margin:0 0 6px;
+  }
+  .sub{color:var(--muted); font-size:15px; margin:0}
+  .tools{display:flex; align-items:center; gap:10px; flex-shrink:0}
+  .btn{
+    border:1px solid var(--line); background:var(--panel); color:var(--muted);
+    border-radius:6px; padding:6px 12px; font:500 13px/1.4 "IBM Plex Sans",sans-serif;
+    cursor:pointer; white-space:nowrap;
+  }
+  .btn:hover{color:var(--fg); border-color:var(--accent); text-decoration:none}
+
+  /* ---------- intro ---------- */
+  .intro{padding:34px 0 8px; max-width:62ch}
+  .intro p{margin:0 0 14px; color:var(--muted)}
+  .intro p strong{color:var(--fg); font-weight:500}
+
+  /* ---------- section label ---------- */
+  .label{
+    font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--faint); margin:40px 0 14px;
+  }
+
+  /* ---------- project card ---------- */
+  .card{
+    border:1px solid var(--line); border-radius:10px; background:var(--panel);
+    overflow:hidden; margin-bottom:20px;
+  }
+  .card-head{padding:22px 24px 0}
+  .idx{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--accent); letter-spacing:.08em}
+  .card h2{font-size:21px; font-weight:600; margin:4px 0 10px; letter-spacing:-.01em}
+  .card-body{padding:0 24px 22px}
+  .card-body p{margin:0 0 14px; color:var(--muted)}
+
+  .facts{display:grid; grid-template-columns:auto 1fr; gap:6px 18px; margin:0 0 16px; font-size:14.5px}
+  .facts dt{font-family:"IBM Plex Mono",monospace; font-size:12.5px; color:var(--faint); letter-spacing:.05em; text-transform:uppercase; padding-top:2px}
+  .facts dd{margin:0; color:var(--fg)}
+  @media (max-width:540px){ .facts{grid-template-columns:1fr; gap:2px 0} .facts dd{margin-bottom:10px} }
+
+  .go{
+    display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:13px;
+    background:var(--accent-soft); border:1px solid var(--line); border-radius:6px;
+    padding:6px 12px; color:var(--accent);
+  }
+  .go:hover{border-color:var(--accent); text-decoration:none}
+
+  /* ---------- media ---------- */
+  .media{border-top:1px solid var(--line); background:var(--panel2); padding:18px 24px 20px}
+  .media video{width:100%; max-width:520px; display:block; border-radius:8px; border:1px solid var(--line); background:#000}
+  .cap{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--faint); margin:10px 0 0}
+
+  /* ---------- approach ---------- */
+  .approach{border:1px solid var(--line); border-radius:10px; padding:22px 24px; background:var(--panel)}
+  .approach p{margin:0 0 12px; color:var(--muted); max-width:66ch}
+  .approach p:last-child{margin:0}
+
+  /* ---------- kit ---------- */
+  .kit{display:flex; flex-wrap:wrap; gap:8px}
+  .chip{
+    font-family:"IBM Plex Mono",monospace; font-size:12.5px; color:var(--muted);
+    border:1px solid var(--line); border-radius:20px; padding:4px 12px; background:var(--panel);
+  }
+
+  /* ---------- footer ---------- */
+  main{padding-bottom:56px}
+  footer{border-top:1px solid var(--line); padding:26px 0 48px}
+  footer p{margin:0 0 6px; font-size:14.5px; color:var(--muted)}
+  .ftlinks{display:flex; gap:18px; flex-wrap:wrap; margin-top:12px; font-family:"IBM Plex Mono",monospace; font-size:13px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap mast">
+    <div>
+      <h1>Marco Faria — Robotics Projects</h1>
+      <p class="sub">General Engineering, University of Cambridge</p>
+    </div>
+    <div class="tools">
+      <a class="btn" href="https://github.com/mf879/robotics-projects">GitHub</a>
+      <button class="btn" id="theme" type="button">Light</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="intro">
+    <p><strong>Arduino and C++ builds I have designed, wired and tested myself.</strong> Each one started as a breadboard circuit before anything was mounted, and each has its own write up in the repository covering the wiring, the bench tests and what I would change next.</p>
+    <p>Where a build has a limitation I have written it down rather than left it out.</p>
+  </section>
+
+  <p class="label">Builds</p>
+
+  <!-- 01 -->
+  <article class="card">
+    <div class="card-head">
+      <span class="idx">01</span>
+      <h2>Light-Seeking Turret</h2>
+    </div>
+    <div class="card-body">
+      <p>Two axis turret that finds the brightest point in the room and locks onto it. It calibrates on startup, sweeps to scan, compares the light readings to work out which way to move, then confirms the lock with a laser and a buzzer.</p>
+      <dl class="facts">
+        <dt>Engineering</dt><dd>Analogue sensing, differential comparison, servo control, startup calibration</dd>
+        <dt>Hardware</dt><dd>Arduino Uno R3, SG90 servos, LDRs, laser module, buzzer</dd>
+      </dl>
+      <a class="go" href="https://github.com/mf879/robotics-projects/tree/main/01-light-seeking-turret">Code and write up →</a>
+    </div>
+    <div class="media" data-demo>
+      <video controls muted playsinline preload="metadata">
+        <source src="media/light-seeking-turret-demo.mp4" type="video/mp4">
+      </video>
+      <p class="cap">Demo — scanning, detecting and locking onto a moving light</p>
+    </div>
+  </article>
+
+  <!-- 02 -->
+  <article class="card">
+    <div class="card-head">
+      <span class="idx">02</span>
+      <h2>Light-Following Robot</h2>
+    </div>
+    <div class="card-body">
+      <p>Two wheeled robot that steers toward a light source using a pair of LDRs, one on each side. The difference between the two readings sets the steering, and the speed scales with how far off it is. A deadband stops it hunting when the light is straight ahead.</p>
+      <dl class="facts">
+        <dt>Engineering</dt><dd>Differential drive, proportional steering, deadband handling, motor driver control</dd>
+        <dt>Hardware</dt><dd>Arduino, paired LDRs, DC motors, motor driver, 3D printed chassis</dd>
+      </dl>
+      <a class="go" href="https://github.com/mf879/robotics-projects/tree/main/02-light-following-robot">Code and write up →</a>
+    </div>
+    <div class="media" data-demo>
+      <video controls muted playsinline preload="metadata">
+        <source src="media/light-following-robot-demo.mp4" type="video/mp4">
+      </video>
+      <p class="cap">Demo — tracking and following a moving light source</p>
+    </div>
+  </article>
+
+  <!-- 03 -->
+  <article class="card">
+    <div class="card-head">
+      <span class="idx">03</span>
+      <h2>Temperature Control System</h2>
+    </div>
+    <div class="card-body">
+      <p>Thermostat built around an NTC thermistor and a relay driven heater. The Beta equation converts resistance to temperature, and hysteresis around the setpoint stops the relay chattering on and off at the threshold. The relay is driven to a safe off state before the pin is configured, so it cannot flick on during boot.</p>
+      <dl class="facts">
+        <dt>Engineering</dt><dd>Thermistor characterisation, Beta equation, hysteresis control, safe startup state</dd>
+        <dt>Hardware</dt><dd>Arduino, NTC thermistor, relay module, heating element</dd>
+      </dl>
+      <a class="go" href="https://github.com/mf879/robotics-projects/tree/main/03-temperature-control-system">Code and write up →</a>
+    </div>
+  </article>
+
+  <p class="label">How I work</p>
+
+  <section class="approach">
+    <p>I test each subsystem on its own before connecting anything to anything else. Sensors get checked against something I already know the answer to, motors get bench tested off the ground, and only then does the loop get closed.</p>
+    <p>Every project folder holds the sketch, the wiring, the bench tests I ran, and the limitations I have not solved yet. The bring up sketches are in there alongside the final code, because they are usually where the real debugging happened.</p>
+  </section>
+
+  <p class="label">Tools and kit</p>
+
+  <div class="kit">
+    <span class="chip">C++ / Arduino</span>
+    <span class="chip">Python</span>
+    <span class="chip">MATLAB</span>
+    <span class="chip">SolidWorks</span>
+    <span class="chip">3D printing</span>
+    <span class="chip">Soldering</span>
+    <span class="chip">Oscilloscope and multimeter</span>
+    <span class="chip">Breadboard prototyping</span>
+  </div>
+
+</main>
+
+<footer class="wrap">
+  <p>Built alongside my engineering degree at Cambridge. More builds are in progress and go up here once they work.</p>
+  <div class="ftlinks">
+    <a href="https://github.com/mf879">github.com/mf879</a>
+    <a href="mailto:mf879@cam.ac.uk">mf879@cam.ac.uk</a>
+  </div>
+</footer>
+
+<script>
+  // Theme toggle. Starts on the system preference, button flips it.
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('theme');
+    var stored = null;
+    try { stored = localStorage.getItem('theme'); } catch (e) {}
+    if (stored) root.setAttribute('data-theme', stored);
+
+    function current() {
+      var set = root.getAttribute('data-theme');
+      if (set) return set;
+      return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+    function paint() { btn.textContent = current() === 'dark' ? 'Light' : 'Dark'; }
+    paint();
+
+    btn.addEventListener('click', function () {
+      var next = current() === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+      paint();
+    });
+  })();
+
+  // If a demo video is missing, hide its panel rather than showing a broken box.
+  (function () {
+    Array.prototype.forEach.call(document.querySelectorAll('[data-demo]'), function (wrap) {
+      var v = wrap.querySelector('video');
+      if (!v) return;
+      function hide() { wrap.style.display = 'none'; }
+      v.addEventListener('error', hide, true);
+      var src = v.querySelector('source');
+      if (src) src.addEventListener('error', hide);
+    });
+  })();
+</script>
+</body>
+</html>
