@@ -1,34 +1,59 @@
-# Robotics Projects — Marco Faria
+# Embedded projects
 
-General Engineering student at the University of Cambridge, building
-mechatronics/embedded projects on the side — mostly Arduino-based
-electromechanical systems, designed and 3D-printed (Bambu Lab A1) at home.
+Arduino and C++ builds I have designed, wired and tested myself. Each folder holds the code, the wiring, the bench tests and what I would change next.
 
-**Live site:** https://mf879.github.io/robotics-projects/
+Marco Faria, second year General Engineering, University of Cambridge.
+
+Start with the self balancing robot if you only look at one.
+
+---
 
 ## Projects
 
-| # | Project | Status | Summary |
-|---|---------|--------|---------|
-| 01 | [Light-Seeking Turret](01-light-seeking-turret/) | ✅ Working | Servo turret sweeps, detects the brightest light source via an LDR, locks on with a laser + buzzer confirmation |
-| 02 | [Light-Following Car](02-light-following-car/) | 🚧 In progress | Two-wheel LDR-steered car; chassis printed, driver electronics bring-up paused pending soldering |
-| 03 | Self-Balancing Robot | 🗓 Planned | Next build — IMU + PID balancing on the N20 gear motors with encoders |
+### [01 – Light seeking turret](01-light-seeking-turret)
+Two axis turret that finds the brightest point in the room using four LDRs in a bridge arrangement and drives two servos to face it. Covers analogue reading, differential sensing and servo control.
 
-## Why these projects
+### [02 – Light following robot](02-light-following-robot)
+Two wheeled robot that steers toward a light source using paired LDRs and a motor driver. Differential drive, deadband handling and speed scaling with error.
 
-Each one bench-tests its subsystems individually before integration —
-sensor read, actuator drive, and control logic are each proven in
-isolation first (see each project's `bringup-tests/` folder), then
-combined into the final closed-loop behaviour. That process is documented
-per project below.
+### [03 – Temperature control system](03-temperature-control-system)
+Thermostat built around an NTC thermistor and a relay driven heater. Beta equation conversion from resistance to temperature, hysteresis to stop the relay chattering, and a safe default state on startup.
 
-## Hardware on hand
+### [04 – Self balancing robot](04-self-balancing-robot)
+Inverted pendulum robot held upright by an MPU6050 and a PID loop driving two motors through a DRV8833. Sensor fusion, loop timing and gain tuning.
 
-Arduino Uno R3 · DRV8833 dual motor driver · N20 micro gear motors w/
-encoders · servo motors · MPU-style IMU/gyroscope · buck converter · 6xAA
-battery pack · Elegoo electronics fundamentals kit (LDRs, resistors,
-transistors, 74HC595, breadboards, etc.) · laser diode module · Bambu Lab
-A1 3D printer for custom mounts/chassis.
+---
+
+## What is in each folder
+
+- **README.md** – what the build does, how it works, the circuit and the results
+- **Source code** – the `.ino` sketches, commented
+- **Media** – photos and video of the build running, where I have them
+- **Notes** – wiring, parts used, known limitations and next steps
+
+---
+
+## Hardware and tools
+
+- **Boards:** Arduino Uno and Nano
+- **Sensors:** LDRs, NTC thermistors, MPU6050 IMU
+- **Actuators:** DC motors, servos, relay modules
+- **Drivers:** L298N, DRV8833
+- **Languages:** C++ (Arduino), Python, MATLAB
+- **Other:** SolidWorks, 3D printing, soldering and bench testing
+
+---
+
+## How I work
+
+Every build here started as a breadboard circuit before anything was mounted. I test each subsystem on its own, check the sensor readings against something known, then close the loop. Where a build has a limitation I have written it down rather than left it out.
+
+---
+
+## Contact
+
+- **Email:** mf879@cam.ac.uk
+- **GitHub:** [github.com/mf879](https://github.com/mf879)
 
 ## About this repo
 
