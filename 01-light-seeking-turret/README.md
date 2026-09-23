@@ -51,11 +51,5 @@ closed-loop sketch above — see [`bringup-tests/`](bringup-tests/):
 - [`potentiometer_test.ino`](bringup-tests/potentiometer_test.ino) —
   analog-input bring-up, a stepping stone toward manual override control.
 
-## Notes
 
-- Code was first drafted with AI assistance, then tested on hardware and
-  reviewed line-by-line to confirm the calibration/margin logic actually
-  matches how this specific LDR and laser module behave.
-- `lightMargin` is the main value to tune: too low and it triggers on
-  ambient light drift; too high and it misses a dim torch.
 
