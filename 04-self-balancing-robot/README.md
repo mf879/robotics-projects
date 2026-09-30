@@ -4,6 +4,10 @@ A two-wheeled robot that balances itself using an MPU6050 IMU and a PID control 
 
 ---
 
+https://github.com/user-attachments/assets/791188ea-c791-42bf-b146-ca7c9511a6f7
+
+
+
 ## Overview
 
 - Arduino Uno reads tilt from an MPU6050 (accelerometer + gyro, combined with a complementary filter)
