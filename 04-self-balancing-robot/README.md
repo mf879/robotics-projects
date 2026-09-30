@@ -107,16 +107,8 @@ output = Kp.error + Ki.integral(error) + Kd.derivative(error)
 A few real bugs worth noting, since they weren't obvious at first:
 
 - **Sensor axis mismatch** - the tilt formula was written assuming the X-axis responded to tilt. Once mounted in the chassis, it was actually the Z-axis. Found by logging raw ax/ay/az while tilting and watching which one actually moved.
-- **Ground connection missing** - I2C hung indefinitely (not a clean "not found" error) because the Arduino's GND was never wired to the shared rail.
 - **Derivative noise** - computing `derivative` from `(error - lastError) / dt` amplified sensor noise badly at fast loop speeds. Fixed by using the gyro rate directly instead.
 - **Integral windup** - unclamped integral term caused erratic, oversized corrections. Fixed by clamping it.
 - **Deadband overcorrection** - forcing every nonzero output up to a minimum PWM caused small necessary corrections to overshoot. Fixed with a small deadzone before applying the minimum.
 
----
-
-
----
-
-
----
 
